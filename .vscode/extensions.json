@@ -1,6 +1,6 @@
 {
   "recommendations": [
-    "Konveyor.konveyor",
-    "Konveyor.konveyor-java" 
+    "ibolton336.konveyor-core",
+    "ibolton336.konveyor-java"
   ]
 }
