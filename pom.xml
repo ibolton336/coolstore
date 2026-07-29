@@ -76,11 +76,13 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jsonp</artifactId>
         </dependency>
-        <!-- Audit logging library - converted from system to compile scope -->
+        <!-- Audit logging library - system-scoped local JAR -->
         <dependency>
             <groupId>com.enterprise</groupId>
             <artifactId>audit-logging-library</artifactId>
             <version>1.0.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/audit-logging-library-1.0.0.jar</systemPath>
         </dependency>        
     </dependencies>
     <build>
