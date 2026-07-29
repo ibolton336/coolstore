@@ -70,6 +70,10 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-qpid-jms</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jsonp</artifactId>
+        </dependency>
         <!-- Audit logging library from local Maven repo -->
         <dependency>
             <groupId>com.enterprise</groupId>
