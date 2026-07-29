@@ -1,6 +1,6 @@
 package com.redhat.coolstore.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -75,3 +75,4 @@ public class CatalogItemEntity implements Serializable {
     }
 
 }
+
