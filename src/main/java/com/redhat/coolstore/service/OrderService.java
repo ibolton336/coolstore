@@ -48,7 +48,6 @@ public class OrderService {
     // Initialize audit logger
     AuditConfiguration config = new AuditConfiguration();
     config.setLogDirectory("./device-inventory-audit-logs");
-    config.setAutoCreateDirectory(true);
     auditLogger = new FileSystemAuditLogger(config);
 
   }
