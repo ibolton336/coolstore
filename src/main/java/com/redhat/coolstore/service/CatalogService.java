@@ -11,6 +11,7 @@ import jakarta.persistence.criteria.Root;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 
 import com.redhat.coolstore.model.*;
 
@@ -38,6 +39,7 @@ public class CatalogService {
         return em.find(CatalogItemEntity.class, itemId);
     }
 
+    @Transactional
     public void updateInventoryItems(String itemId, int deducts) {
         InventoryEntity inventoryEntity = getCatalogItemById(itemId).getInventory();
         int currentQuantity = inventoryEntity.getQuantity();
