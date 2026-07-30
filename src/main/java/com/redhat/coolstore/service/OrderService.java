@@ -16,6 +16,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
 public class OrderService {
@@ -23,6 +24,7 @@ public class OrderService {
   @Inject
   private EntityManager em;
 
+  @Transactional
   public void save(Order order) {
     em.persist(order);
   }
