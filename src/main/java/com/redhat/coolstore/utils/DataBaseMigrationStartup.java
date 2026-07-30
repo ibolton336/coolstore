@@ -25,18 +25,17 @@ public class DataBaseMigrationStartup {
 
     void onStart(@Observes StartupEvent ev) {
         try {
-            logger.info("Initializing/migrating the database using FlyWay");
+            logger.info("Checking database migrations using FlyWay");
             Flyway flyway = Flyway.configure()
                 .dataSource(dataSource)
                 .load();
-            flyway.baseline();
-            // Start the db.migration
-            flyway.migrate();
+            // Quarkus already handles migrations, just validate here
+            flyway.validate();
         } catch (FlywayException e) {
             if(logger !=null)
-                logger.log(Level.SEVERE,"FAILED TO INITIALIZE THE DATABASE: " + e.getMessage(),e);
+                logger.log(Level.SEVERE,"FAILED TO VALIDATE THE DATABASE: " + e.getMessage(),e);
             else
-                System.out.println("FAILED TO INITIALIZE THE DATABASE: " + e.getMessage() + " and injection of logger doesn't work");
+                System.out.println("FAILED TO VALIDATE THE DATABASE: " + e.getMessage() + " and injection of logger doesn't work");
 
         }
     }
