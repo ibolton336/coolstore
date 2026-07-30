@@ -1,13 +1,9 @@
 package com.redhat.coolstore.service;
 
-import java.util.Hashtable;
 import java.util.logging.Logger;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.naming.Context;
-import jakarta.naming.InitialContext;
-import jakarta.naming.NamingException;
 import jakarta.transaction.Transactional;
 
 import com.redhat.coolstore.model.Product;
