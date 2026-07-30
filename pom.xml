@@ -56,8 +56,8 @@
             <artifactId>quarkus-smallrye-reactive-messaging-amqp</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-reactive-messaging-in-memory</artifactId>
+            <groupId>io.smallrye.reactive</groupId>
+            <artifactId>smallrye-reactive-messaging-in-memory</artifactId>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
