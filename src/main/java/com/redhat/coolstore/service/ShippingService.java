@@ -8,9 +8,8 @@ import jakarta.enterprise.context.ApplicationScoped;
 import com.redhat.coolstore.model.ShoppingCart;
 
 @ApplicationScoped
-public class ShippingService implements ShippingServiceRemote {
+public class ShippingService {
 
-    @Override
     public double calculateShipping(ShoppingCart sc) {
 
         if (sc != null) {
@@ -43,7 +42,6 @@ public class ShippingService implements ShippingServiceRemote {
 
     }
 
-    @Override
     public double calculateShippingInsurance(ShoppingCart sc) {
 
         if (sc != null) {
