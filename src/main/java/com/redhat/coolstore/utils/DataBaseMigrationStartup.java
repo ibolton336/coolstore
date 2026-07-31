@@ -28,8 +28,9 @@ public class DataBaseMigrationStartup {
 
         try {
             logger.info("Initializing/migrating the database using FlyWay");
-            Flyway flyway = new Flyway();
-            flyway.setDataSource(dataSource);
+            Flyway flyway = Flyway.configure()
+                .dataSource(dataSource)
+                .load();
             flyway.baseline();
             // Start the db.migration
             flyway.migrate();
