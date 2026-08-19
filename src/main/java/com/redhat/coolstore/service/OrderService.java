@@ -10,19 +10,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
-@Stateless
+@ApplicationScoped
 public class OrderService {
 
   @Inject
   private EntityManager em;
 
+  @Transactional
   public void save(Order order) {
     em.persist(order);
   }
