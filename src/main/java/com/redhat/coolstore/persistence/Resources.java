@@ -1,18 +1,15 @@
 package com.redhat.coolstore.persistence;
 
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import jakarta.enterprise.context.ApplicationScoped;
 
-@Dependent
+/**
+ * This class previously produced an EntityManager using @PersistenceContext and @Produces.
+ * In Quarkus, EntityManager is automatically available for injection when hibernate-orm is configured.
+ * The @Produces pattern for EntityManager is no longer needed or recommended.
+ * Simply inject EntityManager with @Inject where needed.
+ */
+@ApplicationScoped
 public class Resources {
-
-    @PersistenceContext
-    private EntityManager em;
-
-    @Produces
-    public EntityManager getEntityManager() {
-        return em;
-    }
+    // EntityManager is now injected directly in services using @Inject
+    // No producer method needed in Quarkus
 }
