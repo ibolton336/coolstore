@@ -9,15 +9,15 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.JsonWriter;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
+import jakarta.json.JsonWriter;
 
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.logging.Logger;
+import org.jboss.logging.Logger;
 
 /**
  * Created by tqvarnst on 2017-03-30.
@@ -40,7 +40,7 @@ public class Transformers {
             prod.setLink(entity.getInventory().getLink());
             prod.setQuantity(entity.getInventory().getQuantity());
         } else {
-            log.warning("Inventory for " + entity.getName() + "[" + entity.getItemId()+ "] unknown and missing");
+            log.warn("Inventory for " + entity.getName() + "[" + entity.getItemId()+ "] unknown and missing");
         }
         return prod;
     }
