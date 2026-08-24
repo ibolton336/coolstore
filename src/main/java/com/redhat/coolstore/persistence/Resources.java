@@ -1,18 +1,12 @@
 package com.redhat.coolstore.persistence;
 
 import jakarta.enterprise.context.Dependent;
-import jakarta.enterprise.inject.Produces;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 @Dependent
 public class Resources {
-
-    @PersistenceContext
-    private EntityManager em;
-
-    @Produces
-    public EntityManager getEntityManager() {
-        return em;
-    }
+    // In Quarkus, EntityManager is automatically available for @Inject
+    // This producer is not needed and causes ambiguous dependency issues
+    // Keeping the class for potential future use, but removing the producer
 }

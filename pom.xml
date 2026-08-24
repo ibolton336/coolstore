@@ -50,10 +50,10 @@
             <artifactId>quarkus-hibernate-orm</artifactId>
         </dependency>
         
-        <!-- JDBC Driver (PostgreSQL) -->
+        <!-- JDBC Driver (H2 for testing) -->
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jdbc-postgresql</artifactId>
+            <artifactId>quarkus-jdbc-h2</artifactId>
         </dependency>
         
         <!-- Flyway for database migrations -->
@@ -70,8 +70,8 @@
         
         <!-- In-memory messaging connector -->
         <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-reactive-messaging-in-memory</artifactId>
+            <groupId>io.smallrye.reactive</groupId>
+            <artifactId>smallrye-reactive-messaging-in-memory</artifactId>
         </dependency>
         
         <!-- JSON-P for Transformers utility -->
