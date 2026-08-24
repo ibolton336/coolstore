@@ -6,6 +6,7 @@ import jakarta.inject.Inject;
 
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
+import org.eclipse.microprofile.reactive.messaging.OnOverflow;
 
 import com.redhat.coolstore.model.ShoppingCart;
 import com.redhat.coolstore.utils.Transformers;
@@ -18,6 +19,8 @@ public class ShoppingCartOrderProcessor  {
 
     @Inject
     @Channel("orders")
+    @OnOverflow(value = OnOverflow.Strategy.BUFFER)
+    @io.smallrye.reactive.messaging.annotations.Broadcast
     Emitter<String> ordersEmitter;
   
     public void  process(ShoppingCart cart) {

@@ -20,6 +20,7 @@ public class OrderServiceMDB {
 	CatalogService catalogService;
 
 	@Incoming("orders")
+	@io.smallrye.common.annotation.Blocking
 	public void processOrder(String orderJson) {
 		System.out.println("\nMessage recd !");
 		System.out.println("Received order: " + orderJson);

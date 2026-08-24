@@ -17,6 +17,7 @@ public class InventoryNotificationMDB {
     private CatalogService catalogService;
 
     @Incoming("orders")
+    @io.smallrye.common.annotation.Blocking
     public void checkInventory(String orderJson) {
         System.out.println("received message inventory");
         Order order = Transformers.jsonToOrder(orderJson);
