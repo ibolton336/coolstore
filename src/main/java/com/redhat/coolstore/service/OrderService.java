@@ -8,21 +8,28 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
-@Stateless
+@ApplicationScoped
 public class OrderService {
 
   @Inject
   private EntityManager em;
 
+  @Inject
+  @ConfigProperty(name = "audit.log.directory")
+  String logDirectory;
+
+  @Transactional
   public void save(Order order) {
     em.persist(order);
   }
@@ -45,7 +52,7 @@ public class OrderService {
   public void init() throws AuditLoggingException {
     // Initialize audit logger
     AuditConfiguration config = new AuditConfiguration();
-    config.setLogDirectory("./device-inventory-audit-logs");
+    config.setLogDirectory(logDirectory);
     config.setAutoCreateDirectory(true);
     auditLogger = new FileSystemAuditLogger(config);
 
