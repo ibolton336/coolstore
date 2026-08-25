@@ -1,19 +1,17 @@
 package com.redhat.coolstore.service;
 
-import java.util.Hashtable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
-import javax.ejb.Stateful;
-import javax.inject.Inject;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import com.redhat.coolstore.model.Product;
 import com.redhat.coolstore.model.ShoppingCart;
 import com.redhat.coolstore.model.ShoppingCartItem;
 
-@Stateful
+@ApplicationScoped
 public class ShoppingCartService  {
 
     @Inject
@@ -25,19 +23,20 @@ public class ShoppingCartService  {
     @Inject
     PromoService ps;
 
-
     @Inject
     ShoppingCartOrderProcessor shoppingCartOrderProcessor;
 
-    private ShoppingCart cart  = new ShoppingCart(); //Each user can have multiple shopping carts (tabbed browsing)
+    @Inject
+    ShippingService shippingService;
 
-   
+    // Map to store carts by cartId instead of per-session instance
+    private Map<String, ShoppingCart> carts = new ConcurrentHashMap<>();
 
     public ShoppingCartService() {
     }
 
     public ShoppingCart getShoppingCart(String cartId) {
-        return cart;
+        return carts.computeIfAbsent(cartId, k -> new ShoppingCart());
     }
 
     public ShoppingCart checkOutShoppingCart(String cartId) {
@@ -69,11 +68,11 @@ public class ShoppingCartService  {
 
                 }
 
-                sc.setShippingTotal(lookupShippingServiceRemote().calculateShipping(sc));
+                sc.setShippingTotal(shippingService.calculateShipping(sc));
 
                 if (sc.getCartItemTotal() >= 25) {
                     sc.setShippingTotal(sc.getShippingTotal()
-                            + lookupShippingServiceRemote().calculateShippingInsurance(sc));
+                            + shippingService.calculateShippingInsurance(sc));
                 }
 
             }
@@ -109,18 +108,5 @@ public class ShoppingCartService  {
 
     public Product getProduct(String itemId) {
         return productServices.getProductByItemId(itemId);
-    }
-
-	private static ShippingServiceRemote lookupShippingServiceRemote() {
-        try {
-            final Hashtable<String, String> jndiProperties = new Hashtable<>();
-            jndiProperties.put(Context.INITIAL_CONTEXT_FACTORY, "org.wildfly.naming.client.WildFlyInitialContextFactory");
-
-            final Context context = new InitialContext(jndiProperties);
-
-            return (ShippingServiceRemote) context.lookup("ejb:/ROOT/ShippingService!" + ShippingServiceRemote.class.getName());
-        } catch (NamingException e) {
-            throw new RuntimeException(e);
-        }
     }
 }
