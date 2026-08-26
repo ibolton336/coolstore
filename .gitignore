@@ -4,3 +4,11 @@ target
 .idea
 .settings
 .vscode
+graphify-out/
+.goose/
+__pycache__/
+node_modules/
+target/
+*.tmp
+*.swp
+*.bak
