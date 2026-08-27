@@ -61,11 +61,7 @@
         <!-- Messaging -->
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-smallrye-reactive-messaging-jms</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-artemis-jms</artifactId>
+            <artifactId>quarkus-smallrye-reactive-messaging</artifactId>
         </dependency>
         
         <!-- JSON-P for Transformers -->

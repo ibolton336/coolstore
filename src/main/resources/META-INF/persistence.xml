@@ -5,11 +5,18 @@
         http://xmlns.jcp.org/xml/ns/persistence
         http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
     <persistence-unit name="primary" transaction-type="JTA">
+        <!-- Entity classes -->
+        <class>com.redhat.coolstore.model.CatalogItemEntity</class>
+        <class>com.redhat.coolstore.model.InventoryEntity</class>
+        <class>com.redhat.coolstore.model.Order</class>
+        <class>com.redhat.coolstore.model.OrderItem</class>
+        
         <!-- Quarkus handles datasource configuration via application.properties -->
         <properties>
             <property name="javax.persistence.schema-generation.database.action" value="none"/>
             <property name="hibernate.show_sql" value="false" />
             <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
         </properties>
     </persistence-unit>
 </persistence>

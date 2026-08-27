@@ -5,6 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
+import io.smallrye.reactive.messaging.annotations.Broadcast;
 
 import com.redhat.coolstore.model.ShoppingCart;
 import com.redhat.coolstore.utils.Transformers;
@@ -17,6 +18,7 @@ public class ShoppingCartOrderProcessor  {
 
     @Inject
     @Channel("orders")
+    @Broadcast
     Emitter<String> ordersEmitter;
 
     public void  process(ShoppingCart cart) {
