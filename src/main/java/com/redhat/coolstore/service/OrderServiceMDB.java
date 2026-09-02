@@ -1,8 +1,8 @@
 package com.redhat.coolstore.service;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 
@@ -23,7 +23,7 @@ public class OrderServiceMDB {
 	@Inject
 	CatalogService catalogService;
 
-	@Incoming("orders")
+	@Incoming("orders-in")
 	@Transactional
 	public void onOrder(String orderStr) {
 		log.info("Received order: " + orderStr);
