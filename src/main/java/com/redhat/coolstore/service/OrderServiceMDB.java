@@ -1,21 +1,21 @@
 package com.redhat.coolstore.service;
 
-import javax.ejb.ActivationConfigProperty;
-import javax.ejb.MessageDriven;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
+import javax.transaction.Transactional;
+
+import org.eclipse.microprofile.reactive.messaging.Incoming;
 
 import com.redhat.coolstore.model.Order;
 import com.redhat.coolstore.utils.Transformers;
 
-@MessageDriven(name = "OrderServiceMDB", activationConfig = {
-	@ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "topic/orders"),
-	@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
-	@ActivationConfigProperty(propertyName = "acknowledgeMode", propertyValue = "Auto-acknowledge")})
-public class OrderServiceMDB implements MessageListener { 
+import java.util.logging.Logger;
+
+@ApplicationScoped
+public class OrderServiceMDB {
+
+	@Inject
+	Logger log;
 
 	@Inject
 	OrderService orderService;
@@ -23,25 +23,16 @@ public class OrderServiceMDB implements MessageListener {
 	@Inject
 	CatalogService catalogService;
 
-	@Override
-	public void onMessage(Message rcvMessage) {
-		System.out.println("\nMessage recd !");
-		TextMessage msg = null;
-		try {
-				if (rcvMessage instanceof TextMessage) {
-						msg = (TextMessage) rcvMessage;
-						String orderStr = msg.getBody(String.class);
-						System.out.println("Received order: " + orderStr);
-						Order order = Transformers.jsonToOrder(orderStr);
-						System.out.println("Order object is " + order);
-						orderService.save(order);
-						order.getItemList().forEach(orderItem -> {
-							catalogService.updateInventoryItems(orderItem.getProductId(), orderItem.getQuantity());
-						});
-				}
-		} catch (JMSException e) {
-			throw new RuntimeException(e);
-		}
+	@Incoming("orders")
+	@Transactional
+	public void onOrder(String orderStr) {
+		log.info("Received order: " + orderStr);
+		Order order = Transformers.jsonToOrder(orderStr);
+		log.info("Order object is " + order);
+		orderService.save(order);
+		order.getItemList().forEach(orderItem -> {
+			catalogService.updateInventoryItems(orderItem.getProductId(), orderItem.getQuantity());
+		});
 	}
 
 }

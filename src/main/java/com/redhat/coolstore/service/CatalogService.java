@@ -9,12 +9,13 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
-import javax.ejb.Stateless;
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 import com.redhat.coolstore.model.*;
 
-@Stateless
+@ApplicationScoped
 public class CatalogService {
 
     @Inject
@@ -38,6 +39,7 @@ public class CatalogService {
         return em.find(CatalogItemEntity.class, itemId);
     }
 
+    @Transactional
     public void updateInventoryItems(String itemId, int deducts) {
         InventoryEntity inventoryEntity = getCatalogItemById(itemId).getInventory();
         int currentQuantity = inventoryEntity.getQuantity();
