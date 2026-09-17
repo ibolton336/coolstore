@@ -2,11 +2,9 @@ package com.redhat.coolstore.service;
 
 import com.enterprise.audit.logging.config.AuditConfiguration;
 import com.enterprise.audit.logging.exception.AuditLoggingException;
-import com.enterprise.audit.logging.service.FileSystemAuditLogger;
+import com.enterprise.audit.logging.service.StreamableAuditLogger;
 import com.redhat.coolstore.model.Order;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -39,15 +37,15 @@ public class OrderService {
     return em.find(Order.class, id);
   }
 
-  private FileSystemAuditLogger auditLogger;
+  private StreamableAuditLogger auditLogger;
 
   @PostConstruct
   public void init() throws AuditLoggingException {
-    // Initialize audit logger
+    // Initialize audit logger for TCP streaming
     AuditConfiguration config = new AuditConfiguration();
     config.setLogDirectory("./device-inventory-audit-logs");
     config.setAutoCreateDirectory(true);
-    auditLogger = new FileSystemAuditLogger(config);
+    auditLogger = new StreamableAuditLogger(config);
 
   }
 
