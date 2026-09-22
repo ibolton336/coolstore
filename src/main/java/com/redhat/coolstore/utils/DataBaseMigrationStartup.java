@@ -2,12 +2,12 @@ package com.redhat.coolstore.utils;
 
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.FlywayException;
+import org.flywaydb.core.api.configuration.Configuration;
 
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.event.Observes;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.annotation.Resource;
 import javax.sql.DataSource;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,8 +29,8 @@ public class DataBaseMigrationStartup {
 
         try {
             logger.info("Initializing/migrating the database using FlyWay");
-            Flyway flyway = new Flyway();
-            flyway.setDataSource(dataSource);
+            Configuration config = Flyway.configure().dataSource(dataSource).load().getConfiguration();
+            Flyway flyway = Flyway.configure().dataSource(dataSource).load();
             flyway.baseline();
             // Start the db.migration
             flyway.migrate();
