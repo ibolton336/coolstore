@@ -28,27 +28,38 @@
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-rest-jackson</artifactId>
+            <artifactId>quarkus-resteasy-reactive-jackson</artifactId>
+            <version>3.4.1</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jpa</artifactId>
+            <artifactId>quarkus-hibernate-orm</artifactId>
+            <version>3.4.1</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-datasources-postgresql</artifactId>
+            <artifactId>quarkus-jdbc-postgresql</artifactId>
+            <version>3.4.1</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-reactive-messaging</artifactId>
+            <artifactId>quarkus-smallrye-reactive-messaging</artifactId>
+            <version>3.4.1</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-flyway</artifactId>
+            <version>3.4.1</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-logging-json</artifactId>
+            <version>3.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jaxb</artifactId>
+            <version>3.4.1</version>
         </dependency>
         <!-- Audit logging library from local Maven repo -->
         <dependency>
