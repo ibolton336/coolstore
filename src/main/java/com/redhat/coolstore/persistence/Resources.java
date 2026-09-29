@@ -1,18 +1,5 @@
 package com.redhat.coolstore.persistence;
 
-import jakarta.enterprise.context.Dependent;
-import jakarta.enterprise.inject.Produces;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-
-@Dependent
-public class Resources {
-
-    @PersistenceContext
-    private EntityManager em;
-
-    @Produces
-    public EntityManager getEntityManager() {
-        return em;
-    }
-}
+// In Quarkus, EntityManager is automatically provided as a CDI bean when 
+// quarkus-hibernate-orm is present. No need for a custom producer.
+// This class is kept empty for compatibility but can be removed.
