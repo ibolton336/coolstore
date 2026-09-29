@@ -25,14 +25,17 @@ public class DataBaseMigrationStartup {
 
     @PostConstruct
     @Transactional
-    private void startup() {
+    void startup() {
 
 
         try {
             logger.info("Initializing/migrating the database using FlyWay");
-            Flyway flyway = new Flyway();
-            flyway.setDataSource(dataSource);
-            flyway.baseline();
+            // Note: Quarkus handles Flyway migrations automatically via application.properties
+            // This manual migration code is redundant but kept for compatibility
+            Flyway flyway = Flyway.configure()
+                .dataSource(dataSource)
+                .baselineOnMigrate(true)
+                .load();
             // Start the db.migration
             flyway.migrate();
         } catch (FlywayException e) {
