@@ -5,23 +5,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
 import com.redhat.coolstore.model.Product;
 import com.redhat.coolstore.model.ShoppingCart;
 import com.redhat.coolstore.model.ShoppingCartItem;
 import com.redhat.coolstore.service.ShoppingCartService;
 
-@SessionScoped
+@ApplicationScoped
 @Path("/cart")
 public class CartEndpoint implements Serializable {
 
@@ -30,18 +31,32 @@ public class CartEndpoint implements Serializable {
 	@Inject
 	private ShoppingCartService shoppingCartService;
 
+	// Store carts keyed by cartId to avoid HTTP session dependency
+	private Map<String, ShoppingCart> carts = new ConcurrentHashMap<>();
+
+	private ShoppingCart getOrCreateCart(String cartId) {
+		return carts.computeIfAbsent(cartId, k -> new ShoppingCart());
+	}
+
 	@GET
 	@Path("/{cartId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ShoppingCart getCart(@PathParam("cartId") String cartId) {
-		return shoppingCartService.getShoppingCart(cartId);
+		return getOrCreateCart(cartId);
 	}
 
 	@POST
 	@Path("/checkout/{cartId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ShoppingCart checkout(@PathParam("cartId") String cartId) {
-		return shoppingCartService.checkOutShoppingCart(cartId);
+		ShoppingCart cart = getOrCreateCart(cartId);
+		shoppingCartService.priceShoppingCart(cart);
+		// Process the order
+		shoppingCartService.checkOutShoppingCart(cartId);
+		// Clear the cart after checkout
+		cart.resetShoppingCartItemList();
+		shoppingCartService.priceShoppingCart(cart);
+		return cart;
 	}
 
 	@POST
@@ -50,7 +65,7 @@ public class CartEndpoint implements Serializable {
 	public ShoppingCart add(@PathParam("cartId") String cartId,
 							@PathParam("itemId") String itemId,
 							@PathParam("quantity") int quantity) throws Exception {
-		ShoppingCart cart = shoppingCartService.getShoppingCart(cartId);
+		ShoppingCart cart = getOrCreateCart(cartId);
 
 		Product product = shoppingCartService.getProduct(itemId);
 
@@ -77,8 +92,8 @@ public class CartEndpoint implements Serializable {
 	public ShoppingCart set(@PathParam("cartId") String cartId,
 							@PathParam("tmpId") String tmpId) throws Exception {
 
-		ShoppingCart cart = shoppingCartService.getShoppingCart(cartId);
-		ShoppingCart tmpCart = shoppingCartService.getShoppingCart(tmpId);
+		ShoppingCart cart = getOrCreateCart(cartId);
+		ShoppingCart tmpCart = getOrCreateCart(tmpId);
 
 		if (tmpCart != null) {
 			cart.resetShoppingCartItemList();
@@ -104,7 +119,7 @@ public class CartEndpoint implements Serializable {
 
 		List<ShoppingCartItem> toRemoveList = new ArrayList<>();
 
-		ShoppingCart cart = shoppingCartService.getShoppingCart(cartId);
+		ShoppingCart cart = getOrCreateCart(cartId);
 
 		cart.getShoppingCartItemList().stream()
 				.filter(sci -> sci.getProduct().getItemId().equals(itemId))
