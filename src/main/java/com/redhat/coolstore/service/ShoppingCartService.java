@@ -3,8 +3,9 @@ package com.redhat.coolstore.service;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import javax.ejb.Stateful;
-import javax.inject.Inject;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -12,9 +13,10 @@ import javax.naming.NamingException;
 import com.redhat.coolstore.model.Product;
 import com.redhat.coolstore.model.ShoppingCart;
 import com.redhat.coolstore.model.ShoppingCartItem;
+import java.io.Serializable;
 
-@Stateful
-public class ShoppingCartService  {
+@SessionScoped
+public class ShoppingCartService implements Serializable {
 
     @Inject
     Logger log;
@@ -40,6 +42,7 @@ public class ShoppingCartService  {
         return cart;
     }
 
+    @Transactional
     public ShoppingCart checkOutShoppingCart(String cartId) {
         ShoppingCart cart = this.getShoppingCart(cartId);
       

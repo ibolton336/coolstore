@@ -1,9 +1,9 @@
 package com.redhat.coolstore.rest;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.core.Application;
 
-
+// JAX-RS activation is automatic in Quarkus, but keeping class for explicit path configuration
 @ApplicationPath("/services")
 public class RestApplication extends Application {
 
