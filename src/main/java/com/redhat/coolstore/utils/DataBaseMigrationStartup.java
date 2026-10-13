@@ -6,7 +6,6 @@ import org.flywaydb.core.api.FlywayException;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import io.quarkus.runtime.Startup;
 import javax.sql.DataSource;
 import java.util.logging.Level;
@@ -26,7 +25,6 @@ public class DataBaseMigrationStartup {
     DataSource dataSource;
 
     @PostConstruct
-    @Transactional
     private void startup() {
 
 
