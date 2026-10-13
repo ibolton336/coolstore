@@ -9,6 +9,7 @@ public class Producers {
 
     Logger log = Logger.getLogger(Producers.class.getName());
 
+    @Produces
     public Logger produceLog(InjectionPoint injectionPoint) {
         return Logger.getLogger(injectionPoint.getMember().getDeclaringClass().getName());
     }
