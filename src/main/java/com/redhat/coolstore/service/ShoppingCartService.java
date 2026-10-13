@@ -3,7 +3,7 @@ package com.redhat.coolstore.service;
 import java.util.Hashtable;
 import java.util.logging.Logger;
 
-import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import javax.naming.Context;
@@ -15,7 +15,9 @@ import com.redhat.coolstore.model.ShoppingCart;
 import com.redhat.coolstore.model.ShoppingCartItem;
 import java.io.Serializable;
 
-@SessionScoped
+// Note: Changed from @SessionScoped to @ApplicationScoped for Quarkus compatibility
+// Session state would need to be managed differently (e.g., via database or external cache)
+@ApplicationScoped
 public class ShoppingCartService implements Serializable {
 
     @Inject
