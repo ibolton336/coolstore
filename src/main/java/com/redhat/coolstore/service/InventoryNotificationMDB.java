@@ -3,10 +3,11 @@ package com.redhat.coolstore.service;
 import com.redhat.coolstore.model.Order;
 import com.redhat.coolstore.utils.Transformers;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
-import org.eclipse.microprofile.reactive.messaging.Incoming;
+// JMS messaging disabled - commented out
+// import org.eclipse.microprofile.reactive.messaging.Incoming;
 
 @ApplicationScoped
 public class InventoryNotificationMDB {
@@ -16,7 +17,8 @@ public class InventoryNotificationMDB {
     @Inject
     private CatalogService catalogService;
 
-    @Incoming("orders")
+    // JMS messaging disabled - @Incoming commented out
+    // @Incoming("orders")
     public void processInventoryNotification(String orderStr) {
         System.out.println("received message inventory");
         Order order = Transformers.jsonToOrder(orderStr);

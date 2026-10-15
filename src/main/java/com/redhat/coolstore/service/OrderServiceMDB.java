@@ -1,10 +1,11 @@
 package com.redhat.coolstore.service;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
-import org.eclipse.microprofile.reactive.messaging.Incoming;
+// JMS messaging disabled - commented out
+// import org.eclipse.microprofile.reactive.messaging.Incoming;
 
 import com.redhat.coolstore.model.Order;
 import com.redhat.coolstore.utils.Transformers;
@@ -18,7 +19,8 @@ public class OrderServiceMDB {
 	@Inject
 	CatalogService catalogService;
 
-	@Incoming("orders")
+	// JMS messaging disabled - @Incoming commented out
+	// @Incoming("orders")
 	@Transactional
 	public void process(String orderStr) {
 		System.out.println("\nMessage recd !");

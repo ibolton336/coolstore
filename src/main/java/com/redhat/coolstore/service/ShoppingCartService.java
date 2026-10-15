@@ -2,8 +2,8 @@ package com.redhat.coolstore.service;
 
 import java.util.logging.Logger;
 
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.SessionScoped;
+import jakarta.inject.Inject;
 
 import com.redhat.coolstore.model.Product;
 import com.redhat.coolstore.model.ShoppingCart;

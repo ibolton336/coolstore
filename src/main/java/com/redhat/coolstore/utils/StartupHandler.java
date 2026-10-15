@@ -2,9 +2,9 @@ package com.redhat.coolstore.utils;
 
 import io.quarkus.runtime.StartupEvent;
 import io.quarkus.runtime.ShutdownEvent;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 import java.util.logging.Logger;
 
 @ApplicationScoped
