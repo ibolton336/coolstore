@@ -5,7 +5,7 @@
         https://jakarta.ee/xml/ns/persistence
         https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
     <persistence-unit name="primary">
-        <jta-data-source>java:jboss/datasources/CoolstoreDS</jta-data-source>
+        <!-- jta-data-source removed - Quarkus configures datasource via application.properties -->
         <properties>
             <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
             <property name="hibernate.show_sql" value="false" />
