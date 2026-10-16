@@ -2,15 +2,16 @@ package com.redhat.coolstore.service;
 
 import java.util.logging.Logger;
 
-import jakarta.enterprise.context.SessionScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import com.redhat.coolstore.model.Product;
 import com.redhat.coolstore.model.ShoppingCart;
 import com.redhat.coolstore.model.ShoppingCartItem;
 import java.io.Serializable;
 
-@SessionScoped
+@ApplicationScoped
 public class ShoppingCartService implements Serializable {
 
     private static final long serialVersionUID = 1L;
