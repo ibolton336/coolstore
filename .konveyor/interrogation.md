@@ -2,14 +2,15 @@
 
 - Application: coolstore-monolith
 - Target: Quarkus 3 (workflow guide)
-- Decisions: 9 — decided 0, known 4 (D2, D4, D5, D9), assumed 0, open 5 (D1, D3, D6, D7, D8)
+- Decisions: 9 — decided 1 (D1), known 4 (D2, D4, D5, D9), assumed 0, open 4 (D3, D6, D7, D8)
 
 ## D1: Source framework confirmation
 - Evidence: pom.xml declares `javaee-web-api` and `javaee-api` version 7.0 (scope provided), confirming this is a Java EE 7 application. The workflow guide specifies migration from "Java EE" to "Quarkus 3", which matches. However, the code also contains WebLogic-specific packages (weblogic.application, weblogic.i18n.logging, weblogic.jndi) and uses WildFly JNDI context factory in ShoppingCartService.java, suggesting mixed application server history.
 - Options: A) Confirm this is a Java EE application to migrate to Quarkus 3  B) This is not the right migration path for this application
 - Recommendation: A — the dependencies and structure clearly indicate a Java EE 7 application, and the WebLogic packages appear to be stubs or legacy code that will be handled by the migration modules.
-- Decision: Open
-- Consequence: A confirms the migration proceeds; B stops the workflow as the prompt does not match the code.
+- Decision: A — Confirm this is a Java EE application to migrate to Quarkus 3
+- Source: human
+- Consequence: Migration proceeds as planned; WebLogic stubs and JNDI lookups will be addressed by migration modules.
 
 ## D2: Java release
 - Evidence: pom.xml sets `<source>1.8</source>` and `<target>1.8</target>` in maven-compiler-plugin configuration, which is below Java 17 (the minimum for Quarkus 3).
