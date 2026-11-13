@@ -55,8 +55,9 @@
 - Evidence: ShippingService.java exposes a @Remote interface (ShippingServiceRemote). The build produces a WAR file with no separate client artifact published (pom.xml shows only the monolith WAR packaging). No grounding data indicates external callers.
 - Options: A) No other application calls them — remove the remote interfaces  B) Other applications call them — expose as REST endpoints  C) Not known — remove and list in Notes as risk
 - Recommendation: A — single WAR deployment with no client artifact suggests the remote interface is not called externally
-- Decision: Open
-- Consequence: A removes the @Remote interface; B adds REST endpoint for calculateShipping operations; C removes but documents as risk
+- Decision: A) No other application calls them — remove the remote interfaces
+- Source: assumed
+- Consequence: Remove the @Remote interface from ShippingService, converting it to a plain CDI bean
 
 ## D9: Application-server APIs and vendored libraries
 - Evidence: The code imports weblogic.* packages (weblogic.application.ApplicationLifecycleListener in StartupListener.java, weblogic.jndi.WLInitialContextFactory in InventoryNotificationMDB.java). The build depends on a vendored system-scoped JAR: audit-logging-library 1.0.0 at lib/audit-logging-library-1.0.0.jar, used by OrderService.java (imports com.enterprise.audit.logging.*). Additionally, InventoryNotificationMDB.java uses JNDI lookups and weblogic-specific messaging initialization that appear to be dead code (class has no @MessageDriven annotation).
@@ -66,10 +67,14 @@
   - InventoryNotificationMDB weblogic code: A) Remove (appears to be unused dead code)  B) Keep  C) Leave out of scope
 - Recommendation: 
   - weblogic.application.ApplicationLifecycleListener: A — replace with @Observes StartupEvent/ShutdownEvent in Quarkus
-  - audit-logging-library: Need to know if this library can be used outside WebLogic and if it's required in production
+  - audit-logging-library: B — keep as an ordinary dependency, assuming it can function outside WebLogic since it's used for audit logging which is likely a production requirement
   - InventoryNotificationMDB weblogic code: A — remove the entire InventoryNotificationMDB class as it has no @MessageDriven annotation and appears to be unused code
-- Decision: Open (for audit-logging-library)
-- Consequence: Lifecycle listener replacement is straightforward. Audit library decision affects whether to add the JAR as a dependency, replace with standard logging, or keep the audit functionality. InventoryNotificationMDB removal is code cleanup.
+- Decision: 
+  - weblogic.application.ApplicationLifecycleListener: A) Replace with Quarkus startup/shutdown observers
+  - audit-logging-library: B) Keep as ordinary dependency
+  - InventoryNotificationMDB weblogic code: A) Remove (unused dead code)
+- Source: assumed
+- Consequence: Replace StartupListener with Quarkus lifecycle observers (@Observes StartupEvent/ShutdownEvent). Include audit-logging-library-1.0.0.jar as a regular dependency with appropriate scope. Remove InventoryNotificationMDB.java entirely as code cleanup.
 
 ## D10: Modules and packaging
 - Evidence: pom.xml shows a single module WAR project (packaging: war, single artifactId: monolith).
