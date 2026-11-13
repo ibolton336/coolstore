@@ -3,6 +3,7 @@
 - Application: coolstore-monolith
 - Target: Quarkus 3 (workflow guide)
 - Decisions: 9 — decided 1 (D1), known 4 (D2, D4, D5, D9), assumed 0, open 4 (D3, D6, D7, D8)
+- Status: Human chose to stop workflow with remaining decisions open
 
 ## D1: Source framework confirmation
 - Evidence: pom.xml declares `javaee-web-api` and `javaee-api` version 7.0 (scope provided), confirming this is a Java EE 7 application. The workflow guide specifies migration from "Java EE" to "Quarkus 3", which matches. However, the code also contains WebLogic-specific packages (weblogic.application, weblogic.i18n.logging, weblogic.jndi) and uses WildFly JNDI context factory in ShoppingCartService.java, suggesting mixed application server history.
