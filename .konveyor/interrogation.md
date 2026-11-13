@@ -2,7 +2,7 @@
 
 - Application: coolstore-monolith
 - Target: Quarkus 3 (from workflow guide)
-- Decisions: 9 — decided 3, known 3, assumed 0, open 3
+- Decisions: 9 — decided 3, known 3, assumed 3, open 0
 
 ## D1: Source framework matches prompt
 - Evidence: pom.xml shows Java EE 7 dependencies (javaee-web-api 7.0, javaee-api 7.0), packaging is WAR, EJB annotations (@Stateless, @Stateful, @MessageDriven) present in service layer, persistence.xml for JPA configuration. The code matches the prompt's description of a Java EE application.
@@ -56,8 +56,9 @@
 - Evidence: ShippingService.java has @Remote annotation and implements ShippingServiceRemote interface (calculateShipping, calculateShippingInsurance methods). ShoppingCartService.java has lookupShippingServiceRemote() performing local JNDI lookup ("ejb:/ROOT/ShippingService!..."). This is intra-application JNDI, not inter-application remote calls. No client artifact published in pom.xml.
 - Options: A) No other application calls them — remove remote interfaces  B) Expose as REST endpoints  C) Not known — remove and document risk
 - Recommendation: A — JNDI lookup is local (within same WAR), no separate client module, remote interface serves only to satisfy EJB local lookup pattern
-- Decision: Open
-- Consequence: A converts to direct CDI injection, removes @Remote and JNDI lookup; B adds REST resource, documents caller migration; C documents risk in plan notes.
+- Decision: A — No other application calls them
+- Source: assumed
+- Consequence: Converts to direct CDI injection in ShoppingCartService, removes @Remote annotation and ShippingServiceRemote interface, eliminates JNDI lookup code.
 
 ## D9: Application-server APIs and vendored libraries
 - Evidence: Three categories found:
@@ -71,6 +72,7 @@ For NonCatalogLogger: Empty stub, can be deleted by modules/cleanup.md.
 
 Remaining decision: audit-logging-library-1.0.0.jar
 - Options: A) Replace with standard logging  B) Keep as regular dependency  C) Remove audit feature  D) Leave out of scope
-- Recommendation: B if library is available in Maven Central or organization repository, otherwise A — OrderService uses it for audit logging (FileSystemAuditLogger writing to ./device-inventory-audit-logs), replacing with SLF4J/structured logging maintains audit capability
-- Decision: Open
-- Consequence: A replaces FileSystemAuditLogger calls with SLF4J audit logger; B changes system scope to compile, requires library in accessible Maven repository; C removes @PostConstruct/@PreDestroy and audit calls; D blocks migration until resolved.
+- Recommendation: A — OrderService uses it for audit logging (FileSystemAuditLogger writing to ./device-inventory-audit-logs). System-scoped dependencies are problematic. Replacing with SLF4J structured logging maintains audit capability without vendored JAR.
+- Decision: A — Replace with standard logging
+- Source: assumed
+- Consequence: Replaces FileSystemAuditLogger calls in OrderService @PostConstruct/@PreDestroy with SLF4J logger configured for audit events. Removes system-scoped dependency. Audit logs written via standard logging framework to configured appender.
