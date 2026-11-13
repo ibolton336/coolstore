@@ -2,7 +2,7 @@
 
 - Application: coolstore-monolith
 - Target: Quarkus 3 (from workflow guide)
-- Decisions: 9 — decided 1, known 3, assumed 0, open 5
+- Decisions: 9 — decided 2, known 3, assumed 0, open 4
 
 ## D1: Source framework matches prompt
 - Evidence: pom.xml shows Java EE 7 dependencies (javaee-web-api 7.0, javaee-api 7.0), packaging is WAR, EJB annotations (@Stateless, @Stateful, @MessageDriven) present in service layer, persistence.xml for JPA configuration. The code matches the prompt's description of a Java EE application.
@@ -34,8 +34,9 @@
 - Evidence: Two MDB patterns present: OrderServiceMDB.java uses @MessageDriven with destinationType=javax.jms.Topic, destinationLookup=topic/orders. InventoryNotificationMDB.java manually creates TopicConnection using WebLogic JNDI (weblogic.jndi.WLInitialContextFactory). README.md shows ActiveMQ Artemis configuration (JBoss messaging-activemq subsystem, jms-topic add topic/orders). Both consumers subscribe to "topic/orders".
 - Options: A) AMQP 1.0 broker (ActiveMQ Artemis) — maintains topic semantics  B) Apache Kafka  C) In-process CDI events
 - Recommendation: A — organization already runs ActiveMQ Artemis on JBoss, maintains existing message delivery semantics
-- Decision: Open
-- Consequence: A adds quarkus-smallrye-reactive-messaging-amqp and broker configuration; B changes to Kafka connector with different semantics; C removes broker dependency, converts to CDI events.
+- Decision: A — AMQP 1.0 broker (ActiveMQ Artemis)
+- Source: human
+- Consequence: Adds quarkus-smallrye-reactive-messaging-amqp extension and ActiveMQ Artemis broker configuration to application.properties. Converts MDBs to @Incoming methods with SmallRye Reactive Messaging.
 
 ## D6: View layer
 - Evidence: Two JSP files found: src/main/webapp/index.jsp (serves AngularJS single-page application, loads JavaScript/CSS, minimal server-side logic with request.getSession(true)), src/main/webapp/health.jsp (simple health check returning "1"). No JSF configuration. Static resources in src/main/webapp/app/ (AngularJS controllers, services, directives). REST API in com.redhat.coolstore.rest package.
