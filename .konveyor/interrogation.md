@@ -2,7 +2,7 @@
 
 - Application: coolstore-monolith
 - Target: Quarkus 3 (from workflow guide)
-- Decisions: 9 — decided 2, known 3, assumed 0, open 4
+- Decisions: 9 — decided 3, known 3, assumed 0, open 3
 
 ## D1: Source framework matches prompt
 - Evidence: pom.xml shows Java EE 7 dependencies (javaee-web-api 7.0, javaee-api 7.0), packaging is WAR, EJB annotations (@Stateless, @Stateful, @MessageDriven) present in service layer, persistence.xml for JPA configuration. The code matches the prompt's description of a Java EE application.
@@ -42,8 +42,9 @@
 - Evidence: Two JSP files found: src/main/webapp/index.jsp (serves AngularJS single-page application, loads JavaScript/CSS, minimal server-side logic with request.getSession(true)), src/main/webapp/health.jsp (simple health check returning "1"). No JSF configuration. Static resources in src/main/webapp/app/ (AngularJS controllers, services, directives). REST API in com.redhat.coolstore.rest package.
 - Options: A) Keep JSP on Quarkus — not supported, JSP has no Quarkus extension  B) Rewrite as Qute templates  C) Go API-only — move frontend to separate deployment  D) Leave out of scope
 - Recommendation: C — index.jsp is a thin wrapper for AngularJS SPA, health.jsp is trivial. The application is already API-driven via REST endpoints. Serve static resources from META-INF/resources, add explicit /health endpoint.
-- Decision: Open
-- Consequence: A is impossible (JSP unsupported); B rewrites 2 pages as Qute; C moves webapp content to META-INF/resources, adds REST health endpoint, documents that UI is static; D leaves pages broken until follow-up.
+- Decision: C — Go API-only
+- Source: human
+- Consequence: Moves webapp static content (HTML, JavaScript, CSS) to src/main/resources/META-INF/resources, creates index.html from index.jsp content (removing JSP scriptlet), adds REST /health endpoint to replace health.jsp. Application becomes pure REST API serving static frontend.
 
 ## D7: Authentication and authorization
 - Evidence: src/main/webapp/keycloak.json present with realm="eap", auth-server-url="http://localhost:8081/", resource="eap-app". README.md includes detailed Keycloak v20.0.5 setup (create realm from realm-export.json, create users). web.xml has no security-constraint or login-config elements. No @RolesAllowed annotations found in code. Frontend JavaScript handles authentication (keycloak.min.js loaded in index.jsp).
