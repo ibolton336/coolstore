@@ -71,18 +71,17 @@
 - Consequence: InventoryNotificationMDB.java will be removed as it's non-functional code
 
 ## D11: WebLogic NonCatalogLogger stub
-- Evidence: The repository contains stub classes in src/main/java/weblogic/i18n/logging/NonCatalogLogger.java. Need to verify if these are actually used in the application code.
-- Options: A) Replace it with standard logging — SLF4J/java.util.logging  B) Keep stub classes if unused  C) Remove if unused  D) Leave it out of scope and record it as a blocker
-- Recommendation: A — Replace WebLogic-specific logging with standard Java logging
-- Decision: Open
-- Consequence: A replaces weblogic.i18n.logging imports with java.util.logging or SLF4J; B/C keeps or removes stub code; D blocks migration
+- Evidence: The repository contains stub class src/main/java/weblogic/i18n/logging/NonCatalogLogger.java (empty implementations). Grep search shows it's not imported or used anywhere in the application code—it's dead code.
+- Decision: C — Remove the unused stub
+- Source: code
+- Consequence: Remove weblogic/i18n/logging/NonCatalogLogger.java as cleanup
 
 ## D12: System-scoped audit-logging-library dependency
-- Evidence: pom.xml has system-scoped dependency on audit-logging-library-1.0.0.jar from lib/ directory. This is a vendored JAR with groupId com.enterprise, suggesting an organisation-specific library. There are two versions in lib/ directory (1.0.0 and 2.0.0). Need to understand what this library does and if it's actually used.
+- Evidence: pom.xml has system-scoped dependency on audit-logging-library-1.0.0.jar from lib/ directory (groupId com.enterprise). OrderService.java actively uses this library: imports com.enterprise.audit.logging.*, creates FileSystemAuditLogger in @PostConstruct, writes to ./device-inventory-audit-logs directory. Two JAR versions exist in lib/ (1.0.0 declared in pom.xml, 2.0.0 present but unused). This is an organisation-specific proprietary library for file-based audit logging.
 - Options: A) Replace it with the Quarkus or standard equivalent (name it)  B) Keep it as an ordinary dependency — it must resolve from a repository the build can reach and must not need the application server at run time  C) Remove the feature that depends on it  D) Leave it out of scope and record it as a blocker
-- Recommendation: B — Without knowing the library's internals, keeping it as a regular dependency is safest if it doesn't require application server APIs. The library should be published to an accessible Maven repository.
+- Recommendation: B — The library appears to be pure Java file I/O (writes audit logs to filesystem), unlikely to depend on application server APIs. It should be published to an accessible Maven repository and changed to normal dependency scope.
 - Decision: Open
-- Consequence: A requires identifying what the library does and finding alternatives; B changes to normal dependency scope and requires Maven repository publication; C removes audit logging features; D blocks migration pending library analysis
+- Consequence: A requires replacing with alternative audit framework; B changes scope to compile/runtime and requires Maven repository publication or keeping the JAR; C removes audit logging from OrderService; D blocks migration until library is analyzed
 
 ## D13: Modules and packaging
 - Evidence: The build is a single WAR module (pom.xml packaging=war). There is only one pom.xml and one deployable artifact.
