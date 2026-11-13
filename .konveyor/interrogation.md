@@ -33,8 +33,9 @@
 - Evidence: The application has @MessageDriven bean (OrderServiceMDB.java) that listens to "topic/orders" using javax.jms API. README.md shows ActiveMQ Artemis is configured on JBoss EAP (jms-topic add --topic-address=topic.orders).
 - Options: A) An AMQP 1.0 broker, for example ActiveMQ Artemis — keeps queue and topic semantics  B) Apache Kafka  C) In-process CDI events, no broker
 - Recommendation: A — ActiveMQ Artemis matches the current deployment's messaging infrastructure and keeps the same semantics
-- Decision: Open
-- Consequence: A adds quarkus-artemis-jms extension and broker configuration; B requires quarkus-smallrye-reactive-messaging-kafka and semantic changes; C removes broker dependency and converts destinations to CDI events
+- Decision: A) An AMQP 1.0 broker, for example ActiveMQ Artemis — keeps queue and topic semantics
+- Source: human
+- Consequence: Add quarkus-artemis-jms extension and configure ActiveMQ Artemis broker connection, preserving the existing JMS topic semantics
 
 ## D6: View layer
 - Evidence: The application has JSP files (src/main/webapp/index.jsp and health.jsp). index.jsp creates a session and loads an Angular.js single-page application; health.jsp content is minimal. The main UI is an Angular.js application with static resources.
