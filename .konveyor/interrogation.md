@@ -13,8 +13,9 @@
 - Evidence: pom.xml sets maven.compiler.source and target to 1.8 (Java 8), which is below Java 17.
 - Options: A) Java 17 — the minimum Quarkus 3 supports  B) Java 21 — a later long-term-support release
 - Recommendation: A — Java 17 minimizes the jump and is sufficient for Quarkus 3
-- Decision: Open
-- Consequence: Affects compiler settings in the build, language-level fixes in scope, and the base image the deployment needs
+- Decision: B) Java 21 — a later long-term-support release
+- Source: human
+- Consequence: Compiler settings will target Java 21, requiring language-level compatibility fixes for the larger version jump, and deployment will use Java 21 base images
 
 ## D3: Production database
 - Evidence: persistence.xml references JNDI data source "java:jboss/datasources/CoolstoreDS" but does not specify a database type. README.md shows PostgreSQL is configured for deployment (connection URL jdbc:postgresql://127.0.0.1:5432/postgresDB). Flyway is already in use (flyway-core 4.1.2 dependency, migration files at src/main/resources/db/migration/V1_1__CreateSchema.sql and V1_2__AddInitialData.sql).
