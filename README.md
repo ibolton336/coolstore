@@ -179,4 +179,4 @@ If you perform a test checkout of an item, you should see both nodes processing 
 2023-03-02 14:41:23,132 INFO  [stdout] (Thread-3 (ActiveMQ-client-global-threads)) Order object is Order [orderId=0, customerName=Karl Svensson, customerEmail=karl@gmail.com, orderValue=10.49, retailPrice=10.0, discount=-2.5, shippingFee=2.99, shippingDiscount=0.0, itemList=[OrderItem [productId=329299, quantity=1]]]
 
 
-```
+```Push record dogfood run.
