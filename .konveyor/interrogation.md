@@ -41,8 +41,9 @@
 - Evidence: The application has JSP files (src/main/webapp/index.jsp and health.jsp). index.jsp creates a session and loads an Angular.js single-page application; health.jsp content is minimal. The main UI is an Angular.js application with static resources.
 - Options: A) Keep the pages server-rendered on Quarkus  B) Rewrite the pages as Qute templates  C) Go API-only — REST endpoints for what the pages do  D) Leave the view layer out of this migration
 - Recommendation: A — index.jsp is primarily a loader for the Angular.js SPA, so keeping minimal JSP support via quarkus-undertow is the smallest change. The JSP files are simple and serve mainly as entry points to static content.
-- Decision: Open
-- Consequence: A adds quarkus-undertow and moves web resources to META-INF/resources; B requires rewriting JSPs as Qute templates; C removes JSPs and requires separate UI work; D leaves JSPs untouched but non-functional
+- Decision: C) Go API-only — REST endpoints for what the pages do, with the user interface as separate work
+- Source: human
+- Consequence: Remove JSP files, keep REST endpoints that already exist, and document that the user interface will need to be deployed separately (the Angular.js SPA can be served by a separate web server or migrated to a modern framework)
 
 ## D7: Authentication and authorisation
 - Evidence: web.xml has no security constraints or login configuration. keycloak.json exists in src/main/webapp/ configuring OpenID Connect to Keycloak realm "eap" at http://localhost:8081/. README.md confirms Keycloak v20.0.5 is the authentication provider. The Angular.js app loads keycloak.min.js for client-side authentication.
