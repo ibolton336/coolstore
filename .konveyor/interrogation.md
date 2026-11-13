@@ -2,7 +2,7 @@
 
 - Application: coolstore-monolith
 - Target: Quarkus 3 (from workflow guide)
-- Decisions: 9 — decided 0, known 3, assumed 0, open 6
+- Decisions: 9 — decided 1, known 3, assumed 0, open 5
 
 ## D1: Source framework matches prompt
 - Evidence: pom.xml shows Java EE 7 dependencies (javaee-web-api 7.0, javaee-api 7.0), packaging is WAR, EJB annotations (@Stateless, @Stateful, @MessageDriven) present in service layer, persistence.xml for JPA configuration. The code matches the prompt's description of a Java EE application.
@@ -14,8 +14,9 @@
 - Evidence: pom.xml sets maven.compiler.source and target to 1.8. Quarkus 3 requires Java 17 minimum.
 - Options: A) Java 17 — minimum for Quarkus 3  B) Java 21 — later LTS release
 - Recommendation: A — smallest necessary change, well-supported by Quarkus 3
-- Decision: Open
-- Consequence: A sets compiler to 17, runtime images to Java 17; B requires Java 21 images and may need more language-level adjustments.
+- Decision: B — Java 21
+- Source: human
+- Consequence: Sets compiler to 21, runtime images to Java 21. May enable use of newer Java language features.
 
 ## D3: Production database
 - Evidence: persistence.xml references JNDI datasource java:jboss/datasources/CoolstoreDS. README.md shows PostgreSQL setup instructions (podman run postgres container, connection URL jdbc:postgresql://127.0.0.1:5432/postgresDB). Flyway migration scripts in src/main/resources/db/migration (V1_1__CreateSchema.sql, V1_2__AddInitialData.sql).
